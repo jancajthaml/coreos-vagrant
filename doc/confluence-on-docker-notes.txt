@@ -1,0 +1,50 @@
+
+--security-opt=no-new-privileges
+
+
+# Confluence docker (own)
+
+docker stop confluence
+docker rm confluence
+docker volume rm confluence--data confluence--logs confluence--conf confluence--temp
+docker run \
+  --name confluence \
+  --publish 127.0.0.1:8090:8090 \
+  --link postgres-confluence:db \
+  --volume confluence--data:/var/atlassian/application-data \
+  --volume confluence--logs:/opt/atlassian/confluence/logs \
+  --volume confluence--temp:/opt/atlassian/confluence/temp \
+  --read-only \
+  --tmpfs /tmp \
+  --tmpfs /home/confluence/.oracle_jre_usage \
+  kontomierz/confluence
+
+
+# Postgres docker (stock)
+
+docker stop postgres-confluence
+docker rm postgres-confluence
+docker run \
+  --name postgres-confluence \
+  --env POSTGRES_PASSWORD=mysecretpassword \
+  --volume postgres-confluence--data:/var/lib/postgresql/data \
+  --read-only \
+  --tmpfs /tmp \
+  --tmpfs /run/postgresql \
+  postgres
+
+
+# psql
+
+docker run \
+  -it \
+  --link postgres-confluence:postgres \
+  --rm \
+  postgres \
+  sh -c 'exec psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres'
+
+
+Confluence user:
+pwlodarek
+pwlodarek@kontomatik.com
+mysecretpassword

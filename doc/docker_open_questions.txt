@@ -1,0 +1,21 @@
+
+Open questions:
+
+Security
+
+* docker: controlling docker equals having root
+* docker: https://github.com/docker/docker-bench-security
+* docker: how to update the operating system and application dependencies?
+* docker: to what extent container isolation can be trusted, security wise?
+  - "If you have root in a container you can, potentially, get root on the entire box"
+  - "Treat root in a container as root outside a container"
+  - "Use trusted images from your private repositories"
+  - "Don't run containers as root, if possible"
+* coreos: security model inside the cluster, if any?
+
+
+Infrastructure
+
+* docker: where to store private images? (priv docker registry, google, docker hub)
+* docker: how to preserve all kinds of logs out of containers
+  - "Since version 1.5, it is possible to make the Union FS top layer read-only"
